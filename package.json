@@ -1,0 +1,44 @@
+{
+  "name": "client-template",
+  "version": "1.0.0",
+  "description": "Node/Express template for base directory on build. Uses Webpack",
+  "scripts": {
+    "start": "npm run dev-server",
+    "dev-server": "nodemon app.js",
+    "watch": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+http://10.25.34.113:4700/git/bberzellini/webpack-node-template"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.14.0",
+    "jquery": "^3.1.1",
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "body-parser": "^1.16.0",
+    "bootstrap-sass": "^3.3.7",
+    "cors": "^2.8.1",
+    "css-loader": "^0.28.1",
+    "express3-handlebars": "^0.5.2",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "google-maps": "^3.2.1",
+    "gulp": "^3.9.1",
+    "gulp-load-plugins": "^1.3.0",
+    "gulp-util": "^3.0.7",
+    "handlebars-loader": "^1.4.0",
+    "html-loader": "^0.4.4",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.2"
+  }
+}

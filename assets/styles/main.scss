@@ -1,0 +1,21 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  // padding: 0;
+  // margin: 0;
+}
+
+#map-container {
+  width: 100%;
+  height: 100%;
+}
+
+.fadeOut {
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.displayNone {
+  display: none;
+  z-index: -1;
+}

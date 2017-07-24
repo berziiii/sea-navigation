@@ -1,0 +1,19 @@
+node_modules
+package-lock.json
+.DS_Store
+bundle.js
+npm-debug.log*
+launch.json
+env.js
+tmp
+*.woff2
+*.woff
+*.svg
+*.ttf
+*.eot
+*.jpg
+*.png
+*.svg
+
+# Dont ignore in images folder
+!./assets/images/*
