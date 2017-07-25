@@ -2,6 +2,8 @@
 
 let MAP;
 let GOOGLE;
+let addCoord = false;
+let pointBreadcrumbTemplate = require('../views/partials/pointsBreadcrumb.hbs');
 /**
  * @constructor
  */
@@ -59,55 +61,54 @@ let drawNavPlot = function() {
       let distance = (GOOGLE.maps.geometry.spherical.computeDistanceBetween(new GOOGLE.maps.LatLng(coord.lat, coord.lng), new GOOGLE.maps.LatLng(coordinatesArray[i+1].lat, coordinatesArray[+1].lng))/1000);
       totalDistance+=distance;
     }
+
   }
   totalDistance = (totalDistance * .621371).toFixed(2);
-  console.log(totalDistance);
+  $('#totalDistance').html('');
+  $('#totalDistance').html('<h5> Total Distance: '+totalDistance+' Miles</h5>');
 };
 
 let drawMarker = function(coords) {
   let marker = new GOOGLE.maps.Marker({
     map: MAP,
-    draggable: true,
     animation: GOOGLE.maps.Animation.DROP,
-    position: coords,
-    title: 'COORD'
+    position: {lat: coords.lat, lng: coords.lng},
+    title: coords.title,
   });
   if (coordinatesArray.length > 1) {
     drawNavPlot();
   }
+  addCoord = false;
+  MAP.setOptions({draggableCursor:''});
+};
+
+let addPointBreadcrumb = function() {
+  $('#coords-list').html(' ');
+  // for (let i=0; i<coordinatesArray.length;i++) {
+  $('#coords-list').html(pointBreadcrumbTemplate({coordinates: coordinatesArray}));
+  // }
 };
 
 let getClickCoordinates = function(coords) {
+  if (addCoord) {
+    let number  = (coordinatesArray.length + 1);
+    coords.title = `Point ${number}`;
     coordinatesArray.push(coords);
     drawMarker(coords);
-  // let coords = {
-  //   lat: event.latLng.lat(),
-  //   long: event.latLng.lng(),
-  // };
-  // console.log(coords);
-  // this.directionsService.route({
-  //   origin: this.origin,
-  //   destination: {placeId: placeId},
-  //   travelMode: 'WALKING'
-  // }, function(response, status) {
-  //   if (status === 'OK') {
-  //     me.directionsDisplay.setDirections(response);
-  //   } else {
-  //     window.alert('Directions request failed due to ' + status);
-  //   }
-  // });
+    addPointBreadcrumb();
+  }
+};
+
+let addPointEventHandler = function() {
+  $('.add-coord-button').on('click', function() {
+    addCoord = true;
+    MAP.setOptions({draggableCursor:'crosshair'});
+  });
 };
 
 ClickEventHandler.prototype.handleClick = function(event) {
   // If the event has a placeId, use it.
   if (event.placeId) {
-
-    // Calling e.stop() on the event prevents the default info window from
-    // showing.
-    // If you call stop here when there is no placeId you will prevent some
-    // other map click event handlers from receiving the event.
-    // event.stop();
-    // this.calculateAndDisplayRoute(event.placeId);
     getPlaceInformation(event.placeId);
   } else {
     let coords = {
@@ -118,23 +119,9 @@ ClickEventHandler.prototype.handleClick = function(event) {
   }
 };
 
-// ClickEventHandler.prototype.calculateAndDisplayRoute = function(placeId) {
-//   let me = this;
-//   this.directionsService.route({
-//     origin: this.origin,
-//     destination: {placeId: placeId},
-//     travelMode: 'WALKING'
-//   }, function(response, status) {
-//     if (status === 'OK') {
-//       me.directionsDisplay.setDirections(response);
-//     } else {
-//       window.alert('Directions request failed due to ' + status);
-//     }
-//   });
-// };
-
 
 module.exports = {
   ClickEventHandler,
   getClickCoordinates,
+  addPointEventHandler,
 };

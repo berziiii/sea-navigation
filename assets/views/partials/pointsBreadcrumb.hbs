@@ -1,0 +1,18 @@
+{{#each coordinates as |coord|}}
+  <div class="coord-item">
+    <div class="coord-text">
+      <h5>{{coord.title}}</h5>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>LAT: {{coord.lat}}</td>
+            <td>LNG: {{coord.lng}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="coord-remove">
+      <span class="glyphicon glyphicon-trash"></span>
+    </div>
+  </div>
+{{/each}}

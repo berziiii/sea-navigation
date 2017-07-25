@@ -40,6 +40,7 @@ let initMap = function(crds) {
       position: origin,
     });
     new mapEvents.ClickEventHandler(google, map, origin);
+    mapEvents.addPointEventHandler();
     // mapEvents.getClickCoordinates(map);
   });
 };
