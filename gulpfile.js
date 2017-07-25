@@ -23,8 +23,8 @@ gulp.task('styles:watch', function () {
 });
 
 gulp.task('scripts:watch', function () {
-  gulp.watch('./assets/scripts/*.js', ['scripts']);
-  gulp.watch('./assets/scripts/**/*.js', ['scripts']);
+  gulp.watch('./assets/scripts/*', ['scripts']);
+  gulp.watch('./assets/scripts/**/*', ['scripts']);
   gulp.watch('./index.js', ['scripts']);
 });
 
