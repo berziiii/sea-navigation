@@ -58,9 +58,20 @@ module.exports = {
         ]
     },
     resolve: {
-        modulesDirectories: [
-            "node_modules",
-            "assets/scripts"
-        ]
+    modulesDirectories: [
+        "node_modules",
+        "assets/scripts"
+      ]
     },
+    stats: {
+      colors: true,
+      modules: true,
+      reasons: true,
+    },
+    build: {
+      failOnError: true,
+      watch: false,
+      keepalive: false,
+    },
+    devtool: "#inline-source-map",
 };

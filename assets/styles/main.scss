@@ -28,7 +28,7 @@ body {
   min-height: 50px;
   height: auto;
   max-height: 500px;
-  width: 300px;
+  width: 400px;
   background: $mint-green;
   border: 2px solid $grey;
   border-top-left-radius: 10px;
@@ -79,6 +79,8 @@ body {
   width: 100%;
   height: 100%;
   border-right: 1px solid $white;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .total-distance {

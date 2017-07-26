@@ -9,15 +9,14 @@ let pointBreadcrumbTemplate = require('../views/partials/pointsBreadcrumb.hbs');
  */
 
 let coordinatesArray = [];
+let markersArray = [];
+let navPathArray = [];
 
 let ClickEventHandler = function(google, map, origin) {
   this.origin = origin;
   this.map = map;
   MAP = map;
   GOOGLE = google;
-  // this.directionsService = new google.maps.DirectionsService;
-  // this.directionsDisplay = new google.maps.DirectionsRenderer;
-  // this.directionsDisplay.setMap(map);
   this.placesService = new google.maps.places.PlacesService(map);
   this.infowindow = new google.maps.InfoWindow;
   this.infowindowContent = document.getElementById('infowindow-content');
@@ -43,6 +42,14 @@ let getPlaceInformation = function(placeId) {
   });
 };
 
+let formatTotalDistance = function(totalDistance) {
+  // Converts Total Distance from Kilometers into Miles
+  let Miles = (totalDistance * .621371).toFixed(2);
+  // Converts Total Distance from Miles into Nautical Miles
+  // let NauticalMiles = (Miles * 0.868976).toFixed(2);
+  return Miles;
+};
+
 let drawNavPlot = function() {
   let totalDistance = 0;
   let navPlot = new GOOGLE.maps.Polyline({
@@ -52,6 +59,7 @@ let drawNavPlot = function() {
     strokeOpacity: 1.0,
     strokeWeight: 2
   });
+  navPathArray.push(navPlot);
   navPlot.setMap(MAP);
   for (let i=0; i<coordinatesArray.length;i++) {
     let coord = coordinatesArray[i];
@@ -61,11 +69,12 @@ let drawNavPlot = function() {
       let distance = (GOOGLE.maps.geometry.spherical.computeDistanceBetween(new GOOGLE.maps.LatLng(coord.lat, coord.lng), new GOOGLE.maps.LatLng(coordinatesArray[i+1].lat, coordinatesArray[+1].lng))/1000);
       totalDistance+=distance;
     }
-
   }
-  totalDistance = (totalDistance * .621371).toFixed(2);
+  // let nauticalMiles = formatTotalDistance(totalDistance);
+  let miles = formatTotalDistance(totalDistance);
   $('#totalDistance').html('');
-  $('#totalDistance').html('<h5> Total Distance: '+totalDistance+' Miles</h5>');
+  // $('#totalDistance').html('<h5> Total Distance: '+nauticalMiles+' Nautical Miles</h5>');
+  $('#totalDistance').html('<h5> Total Distance: '+miles+' Miles</h5>');
 };
 
 let drawMarker = function(coords) {
@@ -75,18 +84,47 @@ let drawMarker = function(coords) {
     position: {lat: coords.lat, lng: coords.lng},
     title: coords.title,
   });
+  markersArray.push(marker);
+  for (let i=0; i<navPathArray.length; i++) {
+    navPathArray[i].setMap(null);
+  }
+  navPathArray = [];
   if (coordinatesArray.length > 1) {
-    drawNavPlot();
+    drawNavPlot(marker);
   }
   addCoord = false;
   MAP.setOptions({draggableCursor:''});
 };
 
+let removePointFromList = function() {
+  $('.glyphicon-trash').on('click', function() {
+    let index = $(this).data('id');
+    while(markersArray.length) { markersArray.pop().setMap(null); }
+    if (coordinatesArray.length > 1) {
+      coordinatesArray.splice(index, 1);
+      for (let i=0;i<coordinatesArray.length;i++) {
+        let coord = coordinatesArray[i];
+        let number = (i + 1);
+        coord.title = `Point ${number}`;
+        drawMarker(coord);
+        addPointBreadcrumb();
+      }
+      if (coordinatesArray.length === 1) {
+        $('#totalDistance').html('');
+      }
+    } else {
+      coordinatesArray = [];
+      markersArray = [];
+      navPathArray = [];
+      $('#coords-list').html('');
+    }
+  });
+};
+
 let addPointBreadcrumb = function() {
   $('#coords-list').html(' ');
-  // for (let i=0; i<coordinatesArray.length;i++) {
   $('#coords-list').html(pointBreadcrumbTemplate({coordinates: coordinatesArray}));
-  // }
+  removePointFromList();
 };
 
 let getClickCoordinates = function(coords) {
